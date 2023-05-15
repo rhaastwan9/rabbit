@@ -31,5 +31,13 @@ export default defineConfig({
         `,
       }
     }
+  },
+  // devServer:{
+  //   proxy:'http://localhost:5173/'
+  // }
+  devServer: {
+    proxy: {
+        target: 'http://localhost:5173',
+    }
   }
 })
