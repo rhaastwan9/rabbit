@@ -38,18 +38,3 @@ onMounted(()=>getBanner())
   }
 }
 </style>
-```
-## 2. 获取数据渲染组件
-1- 封装接口
-```javascript
-/**
- * @description: 获取banner图
- * @param {*}
- * @return {*}
- */
-import  httpInstance  from '@/utils/http'
-function getBannerAPI (){
-  return request({
-    url:'home/banner'
-  })
-}

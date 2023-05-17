@@ -9,7 +9,7 @@ export const getTopCategoryAPI = (id) => {
   return request({
     url:'/category',
     params:{
-      id
+      id:id
     }
   })
 }

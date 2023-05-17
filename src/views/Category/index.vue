@@ -2,29 +2,47 @@
 import { getTopCategoryAPI } from '@/apis/category'
 import { ref,onMounted } from 'vue'
 import { useRoute } from 'vue-router';
+import { getBannerAPI } from '@/apis/home';
 
 const categoryData = ref({})
 const route = useRoute()
-const getCategory = async (id) => {
+const getCategory = async () => {
     // 如何在setup中获取路由参数 useRoute() -> route 等价于this.$route
-    const res = await getTopCategoryAPI(id)
-    categoryData.value = res.result
+  const res = await getTopCategoryAPI(route.params.id)
+  categoryData.value = res.result
 }
-onMounted(()=> getCategory(route.params.id))
 
-
+const bannerList = ref([])
+const getBanner = async () => {
+  const res = await getBannerAPI({
+    distributionSite: '2'
+  })
+  bannerList.value = res.result
+}
+onMounted(() => {
+  getCategory()
+  getBanner()
+})
 </script>
-
+   
 <template>
   <div class="top-category">
-    <div class="container m-top-20">
-      <!-- 面包屑 -->
-      <div class="bread-container">
-        <el-breadcrumb separator=">">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>{{categoryData.name}}</el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
+       <div class="container m-top-20">
+           <!-- 面包屑 -->
+           <div class="bread-container">
+               <el-breadcrumb separator=">">
+                  <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                  <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
+               </el-breadcrumb>   
+           </div>
+           <!-- 轮播图 -->
+           <div class="category-banner">
+               <el-carousel height="500px">
+                   <el-carousel-item v-for="item in bannerList" :key="item">
+                    <img :src="item.imgUrl" alt="">
+                   </el-carousel-item>
+               </el-carousel>
+           </div>
     </div>
   </div>
 </template>
@@ -106,6 +124,16 @@ onMounted(()=> getCategory(route.params.id))
 
   .bread-container {
     padding: 25px 0;
+  }
+}
+.category-banner {
+  width: 1240px;
+  height: 500px;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>
