@@ -1,17 +1,22 @@
 <script setup>
 import { getTopCategoryAPI } from '@/apis/category'
 import { ref,onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { getBannerAPI } from '@/apis/home'
 import GoodsItem from '../Home/components/GoodsItem.vue'
 
 const categoryData = ref({})
 const route = useRoute()
-const getCategory = async () => {
+const getCategory = async (id= route.params.id) => {
     // 如何在setup中获取路由参数 useRoute() -> route 等价于this.$route
-  const res = await getTopCategoryAPI(route.params.id)
+  const res = await getTopCategoryAPI(id)
   categoryData.value = res.result
 }
+// 在路由更新时重新获取分类数据
+onBeforeRouteUpdate((to) => {
+  getCategory(to.params.id)
+})
+
 
 const bannerList = ref([])
 const getBanner = async () => {
