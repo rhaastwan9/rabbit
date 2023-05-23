@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { loginAPI } from '@/apis/user'
+import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useRouter } from 'vue-router'
@@ -13,6 +13,7 @@ const userInfo = ref({
 })
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // 规则数据对象
 const rules = {
@@ -42,8 +43,7 @@ const doLogin = () => {
     formRef.value.validate(async (valid) => {
     const {account, password} = userInfo.value
     if (valid) {
-      //todo登录
-      await loginAPI({ account, password })
+      await userStore.getUserInfo({ account, password })
       // 1. 提示用户
       ElMessage({ type: 'success', message: '登录成功' })
       // 2. 跳转首页
